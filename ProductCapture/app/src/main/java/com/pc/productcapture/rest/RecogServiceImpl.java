@@ -12,7 +12,6 @@ public class RecogServiceImpl {
         if (null == mApi) {
             RestAdapter restAdapter = new RestAdapter.Builder()
                     .setEndpoint(RecogService.API_URL)
-                    .setLogLevel(RestAdapter.LogLevel.FULL)
                     .build();
 
             mApi = restAdapter.create(RecogService.class);

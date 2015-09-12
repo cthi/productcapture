@@ -15,9 +15,10 @@ import com.pc.productcapture.rest.models.RecogResponse;
 import com.pc.productcapture.rest.models.TokenResponse;
 
 import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -26,18 +27,22 @@ import retrofit.mime.TypedFile;
 public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_IMG = 10;
     private RecogService mRecogService;
-    @InjectView(R.id.activity_main_capture)
-    Button mCapture;
+    private Button mCapture;
     private Uri fileUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+
+        bindViews();
 
         mRecogService = RecogServiceImpl.getInstance();
         setCaptureListener();
+    }
+
+    private void bindViews() {
+        mCapture = (Button) findViewById(R.id.activity_main_capture);
     }
 
     private void setCaptureListener() {
@@ -57,18 +62,8 @@ public class MainActivity extends AppCompatActivity {
         if (null == intent) {
             mRecogService.postImageRecognitions("en_US", new TypedFile("image/jpeg", new File(fileUri.getPath())),new Callback<TokenResponse>() {
                 @Override
-                public void success(TokenResponse tokenResponse, Response response) {
-                    mRecogService.getImageRecognitions(tokenResponse.token, new Callback<RecogResponse>() {
-                        @Override
-                        public void success(RecogResponse recogResponse, Response response) {
-                            System.out.println(response);
-                        }
-
-                        @Override
-                        public void failure(RetrofitError error) {
-                            System.out.println(error.getKind());
-                        }
-                    });
+                public void success(final TokenResponse tokenResponse, Response response) {
+                   checkIfComplete(tokenResponse.token);
                 }
 
                 @Override
@@ -76,6 +71,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void checkIfComplete(final String token) {
+        ScheduledExecutorService worker =
+                Executors.newSingleThreadScheduledExecutor();
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                mRecogService.getImageRecognitions(token, new Callback<RecogResponse>() {
+                    @Override
+                    public void success(RecogResponse recogResponse, Response response) {
+                        if (recogResponse.status.equals("not completed")){
+                            checkIfComplete(token);
+                        } else {
+                            System.out.println(recogResponse.toString());
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        System.out.println(error.getKind());
+                    }
+                });
+            }
+        };
+        worker.schedule(r, 8, TimeUnit.SECONDS);
     }
 
     private static File getOutputMediaFile() {
