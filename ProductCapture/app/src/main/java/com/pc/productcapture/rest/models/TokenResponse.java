@@ -1,16 +1,16 @@
 package com.pc.productcapture.rest.models;
 
 public class TokenResponse {
-    public final String Token;
+    public final String token;
 
     public TokenResponse(String token) {
-        Token = token;
+        this.token = token;
     }
 
     @Override
     public String toString() {
         return "TokenResponse{" +
-                "Token='" + Token + '\'' +
+                "Token='" + token + '\'' +
                 '}';
     }
 }

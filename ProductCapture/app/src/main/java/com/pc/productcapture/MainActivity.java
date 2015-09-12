@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.pc.productcapture.rest.RecogService;
 import com.pc.productcapture.rest.RecogServiceImpl;
+import com.pc.productcapture.rest.models.RecogResponse;
 import com.pc.productcapture.rest.models.TokenResponse;
 
 import java.io.File;
@@ -53,26 +54,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        System.out.println(resultCode);
-
         if (null == intent) {
-            System.out.println(mRecogService.toString());
-            mRecogService.postImageRecognitions("en_US", new TypedFile("application/octet-stream", new File(fileUri.getPath())), new Callback<TokenResponse>() {
+            mRecogService.postImageRecognitions("en_US", new TypedFile("image/jpeg", new File(fileUri.getPath())),new Callback<TokenResponse>() {
                 @Override
                 public void success(TokenResponse tokenResponse, Response response) {
-                    System.out.println(tokenResponse.toString());
+                    mRecogService.getImageRecognitions(tokenResponse.token, new Callback<RecogResponse>() {
+                        @Override
+                        public void success(RecogResponse recogResponse, Response response) {
+                            System.out.println(response);
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            System.out.println(error.getKind());
+                        }
+                    });
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-                    System.out.println(error.getKind());
                 }
             });
         }
     }
 
     private static File getOutputMediaFile() {
-        File mediaStorageDir = new File(Environment.getExternalStorageDirectory() + "/pics");
+        File mediaStorageDir = new File(Environment.getExternalStorageDirectory() + "/pics.jpg");
         return new File(mediaStorageDir.getPath());
     }
 }
