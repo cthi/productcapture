@@ -1,6 +1,8 @@
 package com.pc.productcapture.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +14,20 @@ import com.bumptech.glide.Glide;
 import com.pc.productcapture.R;
 import com.pc.productcapture.rest.wmModel.Item;
 
+import java.text.DecimalFormat;
 import java.util.List;
+
+import static android.content.Intent.*;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private Context mContext;
     private List<Item> mItems;
+    DecimalFormat df;
 
     public ItemAdapter(Context context, List<Item> items) {
         mContext = context;
         mItems = items;
+        df = new DecimalFormat("$0.00");
     }
 
     @Override
@@ -40,6 +47,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView mTitle;
         TextView mPrice;
         ImageView mImg;
+        String url;
 
         public ViewHolder(View view) {
             super(view);
@@ -53,21 +61,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         public void bind(Item item) {
             mTitle.setText(item.name);
-            mPrice.setText(Double.toString(item.salePrice));
-
-            Glide.with(mContext)
-                    .load(item.thumbnailImage)
-                    .into(mImg);
+            mPrice.setText(df.format(item.salePrice));
+            Glide.with(mContext).load(item.thumbnailImage).into(mImg);
+            url = item.addToCartUrl;
         }
 
         @Override
         public void onClick(View view) {
-//            Intent intent = new Intent(mContext, SongSubsetActivity.class);
-//            intent.putExtra(Constants.QUERY_CONSTRAINT, mAlbumList.get(getAdapterPosition()).getTitle());
-//            intent.putExtra(Constants.QUERY_TYPE, Constants.QUERY_TYPE_ALBUM);
-//            intent.putExtra(Constants.DATA_ALBUM_ID, mAlbumList.get(getAdapterPosition()).getId());
-//            ATPApplication.subActivityWillBeVisible();
-//            mContext.startActivity(intent);
+            Intent i = new Intent(ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            mContext.startActivity(i);
         }
     }
 
