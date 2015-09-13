@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.pc.productcapture.adapter.ItemAdapter;
 import com.pc.productcapture.rest.WalmartService;
@@ -43,5 +44,17 @@ public class WalmartActivity extends AppCompatActivity {
         mRv.setLayoutManager(new LinearLayoutManager(this));
 
         getSupportActionBar().setTitle(query);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

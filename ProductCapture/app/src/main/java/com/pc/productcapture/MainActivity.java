@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.pc.productcapture.rest.RecogService;
@@ -35,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_IMG = 10;
     private RecogService mRecogService;
     private Button mCapture;
+    private ImageView mCameraImg;
     private View mBg;
     private ProgressBar mPb;
     private Uri fileUri;
+    private boolean shouldHide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         mCapture = (Button) findViewById(R.id.activity_main_capture);
         mBg = findViewById(R.id.bg);
         mPb = (ProgressBar) findViewById(R.id.activity_main_loader);
+        mCameraImg = (ImageView) findViewById(R.id.activity_logo);
     }
 
     private void setCaptureListener() {
@@ -70,10 +74,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (shouldHide) {
+            mPb.setVisibility(View.VISIBLE);
+            mCameraImg.setVisibility(View.INVISIBLE);
+            shouldHide = false;
+        } else {
+            mPb.setVisibility(View.INVISIBLE);
+            mCameraImg.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (null == intent) {
-            mPb.setVisibility(View.VISIBLE);
-            mCapture.setVisibility(View.GONE);
+            shouldHide = true;
 
             mRecogService.postImageRecognitions("en_US", new TypedFile("image/jpeg", new File
                     (fileUri.getPath())), new Callback<TokenResponse>() {
