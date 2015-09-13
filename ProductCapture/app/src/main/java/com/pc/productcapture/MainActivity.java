@@ -80,10 +80,12 @@ public class MainActivity extends AppCompatActivity {
         if (shouldHide) {
             mPb.setVisibility(View.VISIBLE);
             mCameraImg.setVisibility(View.INVISIBLE);
+            mCapture.setVisibility(View.INVISIBLE);
             shouldHide = false;
         } else {
             mPb.setVisibility(View.INVISIBLE);
             mCameraImg.setVisibility(View.VISIBLE);
+            mCapture.setVisibility(View.VISIBLE);
         }
     }
 
