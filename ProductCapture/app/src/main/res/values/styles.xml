@@ -7,4 +7,8 @@
         <item name="colorPrimary">#ffffff</item>
     </style>
 
+    <style name="AppTheme.Results" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/tb</item>
+    </style>
+
 </resources>

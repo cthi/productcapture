@@ -22,6 +22,7 @@
 
         <activity
             android:name=".WalmartActivity"
+            android:theme="@style/AppTheme.Results"
             android:screenOrientation="portrait"/>
     </application>
 
