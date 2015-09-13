@@ -1,4 +1,4 @@
-package com.pc.productcapture.rest.models;
+package com.pc.productcapture.rest.recogModel;
 
 public class TokenResponse {
     public final String token;

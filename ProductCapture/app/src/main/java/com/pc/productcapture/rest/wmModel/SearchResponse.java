@@ -1,9 +1,13 @@
-package com.pc.productcapture.rest.models;
+package com.pc.productcapture.rest.wmModel;
 
 import java.util.List;
 
 public class SearchResponse {
-    List<Product> items;
+    public final List<Item> items;
+
+    public SearchResponse(List<Item> items) {
+        this.items = items;
+    }
 
     @Override
     public String toString() {
