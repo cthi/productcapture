@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
@@ -33,7 +34,7 @@ import retrofit.mime.TypedFile;
 public class MainActivity extends AppCompatActivity {
     private static final int CAPTURE_IMG = 10;
     private RecogService mRecogService;
-    private ImageButton mCapture;
+    private Button mCapture;
     private View mBg;
     private ProgressBar mPb;
     private Uri fileUri;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        mCapture = (ImageButton) findViewById(R.id.activity_main_capture);
+        mCapture = (Button) findViewById(R.id.activity_main_capture);
         mBg = findViewById(R.id.bg);
         mPb = (ProgressBar) findViewById(R.id.activity_main_loader);
     }

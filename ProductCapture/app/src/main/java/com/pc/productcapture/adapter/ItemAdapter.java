@@ -12,15 +12,18 @@ import com.bumptech.glide.Glide;
 import com.pc.productcapture.R;
 import com.pc.productcapture.rest.wmModel.Item;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private Context mContext;
     private List<Item> mItems;
+    DecimalFormat df;
 
     public ItemAdapter(Context context, List<Item> items) {
         mContext = context;
         mItems = items;
+        df = new DecimalFormat("$0.00");
     }
 
     @Override
@@ -46,6 +49,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
             mTitle = (TextView) view.findViewById(R.id.title);
             mPrice = (TextView) view.findViewById(R.id.price);
+
             mImg = (ImageView) view.findViewById(R.id.img);
 
             view.setOnClickListener(this);
@@ -53,7 +57,10 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         public void bind(Item item) {
             mTitle.setText(item.name);
-            mPrice.setText(Double.toString(item.salePrice));
+
+
+            mPrice.setText(df.format(item.salePrice));
+
 
             Glide.with(mContext)
                     .load(item.thumbnailImage)
