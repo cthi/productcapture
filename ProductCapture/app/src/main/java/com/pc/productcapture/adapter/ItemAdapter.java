@@ -55,7 +55,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             mTitle = (TextView) view.findViewById(R.id.title);
             mPrice = (TextView) view.findViewById(R.id.price);
             mImg = (ImageView) view.findViewById(R.id.img);
-
+w
             view.setOnClickListener(this);
         }
 
